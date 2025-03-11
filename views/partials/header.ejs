@@ -1,0 +1,11 @@
+<header>
+    <nav>
+      <a href="/">Inicio</a>
+      <% if(user){ %>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Salir</a>
+      <% } else { %>
+        <a href="/login">Iniciar Sesión</a>
+      <% } %>
+    </nav>
+  </header>
