@@ -1,0 +1,20 @@
+
+body {
+    background-color: #F8F9FA; 
+    color: #6C757D;          
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    background-color: #0D6EFD; 
+    color: #fff;
+    padding: 1rem;
+  }
+  
+  footer {
+    background-color: #6C757D;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+  }
+  
