@@ -3,6 +3,11 @@
 <main>
   <h1>Bienvenido a Mi Sitio Web</h1>
   <p>Esta es la página de inicio.</p>
+  <% if (user) { %>
+    <p>Hola, <%= user.username %>!</p>
+  <% } else { %>
+    <p>Por favor, <a href="/login">inicia sesión</a> para continuar.</p>
+  <% } %>
 </main>
 
 <%- include('../partials/footer') %>
