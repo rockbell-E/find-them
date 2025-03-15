@@ -1,12 +1,12 @@
-const { Worker, Branch } = require('../models'); 
 
+const { Worker, Branch } = require('../models'); 
 const dashboard = (req, res) => {
   res.render('pages/empresaDashboard', { title: 'Empresa Dashboard', user: req.session.user });
 };
 
 const listWorkers = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId;
+    const companyId = req.session.user.companyId; 
     const workers = await Worker.findAll({ where: { companyId, active: true } });
     res.render('pages/empresaWorkers', { title: 'Lista de Trabajadores', workers });
   } catch (error) {
@@ -23,16 +23,7 @@ const createWorker = async (req, res) => {
   try {
     const companyId = req.session.user.companyId;
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Worker.create({
-      firstName,
-      secondName,
-      lastName,
-      motherLastName,
-      position,
-      location,
-      companyId,
-      active: true
-    });
+    await Worker.create({ firstName, secondName, lastName, motherLastName, position, location, companyId, active: true });
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);
@@ -43,6 +34,7 @@ const createWorker = async (req, res) => {
 const getEditWorker = async (req, res) => {
   try {
     const worker = await Worker.findByPk(req.params.workerId);
+    if (!worker) return res.redirect('/empresa/workers');
     res.render('pages/empresaEditWorker', { title: 'Editar Trabajador', worker });
   } catch (error) {
     console.error(error);
@@ -53,10 +45,7 @@ const getEditWorker = async (req, res) => {
 const updateWorker = async (req, res) => {
   try {
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Worker.update(
-      { firstName, secondName, lastName, motherLastName, position, location },
-      { where: { id: req.params.workerId } }
-    );
+    await Worker.update({ firstName, secondName, lastName, motherLastName, position, location }, { where: { id: req.params.workerId } });
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);
@@ -104,6 +93,7 @@ const createBranch = async (req, res) => {
 const getEditBranch = async (req, res) => {
   try {
     const branch = await Branch.findByPk(req.params.branchId);
+    if (!branch) return res.redirect('/empresa/branches');
     res.render('pages/editBranch', { title: 'Editar Sucursal', branch });
   } catch (error) {
     console.error(error);
@@ -114,10 +104,7 @@ const getEditBranch = async (req, res) => {
 const updateBranch = async (req, res) => {
   try {
     const { name, location } = req.body;
-    await Branch.update(
-      { name, location },
-      { where: { id: req.params.branchId } }
-    );
+    await Branch.update({ name, location }, { where: { id: req.params.branchId } });
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);

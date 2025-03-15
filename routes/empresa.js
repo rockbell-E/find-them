@@ -5,10 +5,9 @@ const empresaController = require('../controllers/empresaController');
 
 router.use((req, res, next) => {
   if (req.session.user && req.session.user.role === 'empresa') {
-    next();
-  } else {
-    res.redirect('/login');
+    return next();
   }
+  res.redirect('/login');
 });
 
 router.get('/dashboard', empresaController.dashboard);

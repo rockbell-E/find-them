@@ -5,10 +5,9 @@ const adminController = require('../controllers/adminController');
 
 router.use((req, res, next) => {
   if (req.session.user && req.session.user.role === 'admin') {
-    next();
-  } else {
-    res.redirect('/login');
+    return next();
   }
+  res.redirect('/login');
 });
 
 router.get('/dashboard', adminController.dashboard);
