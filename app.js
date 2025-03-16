@@ -31,6 +31,13 @@ app.use((req, res, next) => {
   res.status(404).render('errors/404', { title: 'Página no encontrada' });
 });
 
+const { sequelize } = require('./models');
+
+sequelize.authenticate()
+  .then(() => console.log('Conexión establecida correctamente a la base de datos.'))
+  .catch(err => console.error('No se pudo conectar a la base de datos:', err));
+
+
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });

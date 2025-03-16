@@ -1,0 +1,23 @@
+header {
+  background-color: #0d6efd;
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+}
+
+header nav a {
+    color: #fff;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+footer {
+  background-color: #6c757d; 
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

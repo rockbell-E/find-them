@@ -1,21 +1,33 @@
-<%- include('../partials/header') %>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/header-footer.css">
+  </head>
+  <body>
+    <%- include('../partials/header') %>
 
-<main>
-  <h1>Iniciar Sesión</h1>
-  <% if (typeof error !== 'undefined') { %>
-    <p style="color: red;"><%= error %></p>
-  <% } %>
-  <form action="/login" method="POST">
-    <div>
-      <label for="username">Usuario:</label>
-      <input type="text" name="username" id="username" required>
-    </div>
-    <div>
-      <label for="password">Contraseña:</label>
-      <input type="password" name="password" id="password" required>
-    </div>
-    <button type="submit">Entrar</button>
-  </form>
-</main>
+    <main>
+      <h1>Iniciar Sesión</h1>
+      <% if (typeof error !== 'undefined') { %>
+      <p style="color: red"><%= error %></p>
+      <% } %>
+      <form action="/login" method="POST">
+        <div>
+          <label for="username">Usuario:</label>
+          <input type="text" name="username" id="username" required />
+        </div>
+        <div>
+          <label for="password">Contraseña:</label>
+          <input type="password" name="password" id="password" required />
+        </div>
+        <button type="submit">Entrar</button>
+      </form>
+    </main>
 
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>
+  </body>
+</html>
