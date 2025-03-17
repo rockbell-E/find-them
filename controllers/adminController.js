@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 
 const dashboard = (req, res) => {
   console.log('Accediendo al dashboard del admin');
-  res.render('pages/adminDashboard', { title: 'Admin Dashboard', user: req.session.user });
+  res.render('pages/adminDashboard', { title: 'Admin Dashboard', user: req.session.user, error: null });
 };
 
 const listCompanies = async (req, res) => {
@@ -22,10 +22,10 @@ const listCompanies = async (req, res) => {
       empresas = await Empresa.findAll({ where: { active: true } });
     }
     
-    res.render('pages/companies', { title: 'Lista de Empresas', empresas, searchQuery });
+    res.render('pages/companies', { title: 'Lista de Empresas', empresas, searchQuery, error: null });
   } catch (error) {
     console.error(error);
-    res.render('pages/companies', { title: 'Lista de Empresas', error: 'Error al obtener empresas' });
+    res.render('pages/companies', { title: 'Lista de Empresas', empresas: [], searchQuery: '', error: 'Error al obtener empresas' });
   }
 };
 
@@ -48,10 +48,11 @@ const getEditCompany = async (req, res) => {
   try {
     const empresa = await Empresa.findByPk(req.params.id);
     if (!empresa) return res.redirect('/admin/companies');
-    res.render('pages/editCompany', { title: 'Editar Empresa', empresa });
+    res.render('pages/editCompany', { title: 'Editar Empresa', empresa, error: null });
   } catch (error) {
     console.error(error);
-    res.redirect('/admin/companies');
+    res.render('pages/editCompany', { title: 'Editar Empresa', empresa });
+
   }
 };
 
@@ -62,7 +63,8 @@ const updateCompany = async (req, res) => {
     res.redirect('/admin/companies');
   } catch (error) {
     console.error(error);
-    res.redirect('/admin/companies');
+    const empresa = await Empresa.findByPk(req.params.id);
+    res.render('pages/editCompany', { title: 'Editar Empresa', empresa, error: 'Error al actualizar la empresa' });
   }
 };
 
@@ -80,16 +82,16 @@ const listWorkers = async (req, res) => {
   try {
     const empresaId = req.params.id;
     const workers = await Trabajador.findAll({ where: { empresaId, active: true } });
-    res.render('pages/workers', { title: 'Lista de Trabajadores', workers, empresaId });
+    res.render('pages/workers', { title: 'Lista de Trabajadores', workers, empresaId, error: null });
   } catch (error) {
     console.error(error);
-    res.render('pages/workers', { title: 'Lista de Trabajadores', error: 'Error al obtener trabajadores' });
+    res.render('pages/workers', { title: 'Lista de Trabajadores', workers: [], empresaId: req.params.id, error: 'Error al obtener trabajadores' });
   }
 };
 
 const getNewWorker = (req, res) => {
   const empresaId = req.params.id;
-  res.render('pages/newWorker', { title: 'Nuevo Trabajador', empresaId });
+  res.render('pages/newWorker', { title: 'Nuevo Trabajador', empresaId, error: null });
 };
 
 const createWorker = async (req, res) => {
@@ -109,7 +111,7 @@ const createWorker = async (req, res) => {
     res.redirect(`/admin/companies/${empresaId}/workers`);
   } catch (error) {
     console.error(error);
-    res.redirect(`/admin/companies/${req.params.id}/workers`);
+    res.render('pages/newWorker', { title: 'Nuevo Trabajador', empresaId: req.params.id, error: 'Error al crear el trabajador' });
   }
 };
 
@@ -118,7 +120,7 @@ const getEditWorker = async (req, res) => {
     const empresaId = req.params.id;
     const worker = await Trabajador.findByPk(req.params.workerId);
     if (!worker) return res.redirect(`/admin/companies/${empresaId}/workers`);
-    res.render('pages/editWorker', { title: 'Editar Trabajador', worker, empresaId });
+    res.render('pages/editWorker', { title: 'Editar Trabajador', worker, empresaId, error: null });
   } catch (error) {
     console.error(error);
     res.redirect(`/admin/companies/${req.params.id}/workers`);
@@ -136,7 +138,8 @@ const updateWorker = async (req, res) => {
     res.redirect(`/admin/companies/${empresaId}/workers`);
   } catch (error) {
     console.error(error);
-    res.redirect(`/admin/companies/${req.params.id}/workers`);
+    const worker = await Trabajador.findByPk(req.params.workerId);
+    res.render('pages/editWorker', { title: 'Editar Trabajador', worker, empresaId: req.params.id, error: 'Error al actualizar el trabajador' });
   }
 };
 

@@ -21,9 +21,14 @@
         <% empresas.forEach(function(empresa) { %>
           <li>
             <strong><%= empresa.name %></strong> - <%= empresa.email %>
-            <!-- Agrega más datos o enlaces para editar, etc. -->
+            <a href="/admin/companies/<%= empresa.id %>/edit" class="btn-edit">Editar</a>
+            <form action="/admin/companies/<%= empresa.id %>/delete" method="POST" style="display: inline;">
+              <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta empresa?');">
+                Eliminar
+              </button>
+            </form>
           </li>
-        <% }) %>
+        <% }); %>
       </ul>
     <% } else { %>
       <p>No se encontraron empresas.</p>

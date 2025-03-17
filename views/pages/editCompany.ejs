@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Empresa</title>
+  <link rel="stylesheet" href="/css/editCompany.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main>
+    <h1>Editar Empresa</h1>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <% if (empresa) { %>
+      <form action="/admin/companies/<%= empresa.id %>" method="POST">
+        <div class="form-group">
+          <label for="name">Nombre de la Empresa:</label>
+          <input type="text" name="name" id="name" value="<%= empresa.name %>" required>
+        </div>
+        <div class="form-group">
+          <label for="headquarters">Casa Matriz (Sede):</label>
+          <input type="text" name="headquarters" id="headquarters" value="<%= empresa.headquarters %>" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo Electrónico:</label>
+          <input type="email" name="email" id="email" value="<%= empresa.email %>" required>
+        </div>
+        <div class="form-group">
+          <label for="contact">Número de Contacto:</label>
+          <input type="text" name="contact" id="contact" value="<%= empresa.contact %>" required>
+        </div>
+        <button type="submit">Actualizar Empresa</button>
+      </form>
+    <% } else { %>
+      <p>No se encontró la empresa.</p>
+    <% } %>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
