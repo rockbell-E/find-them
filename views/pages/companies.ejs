@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/companies.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <h1><%= title %></h1>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <% if (empresas && empresas.length > 0) { %>
+      <ul>
+        <% empresas.forEach(function(empresa) { %>
+          <li>
+            <strong><%= empresa.name %></strong> - <%= empresa.email %>
+            <!-- Agrega más datos o enlaces para editar, etc. -->
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No se encontraron empresas.</p>
+    <% } %>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

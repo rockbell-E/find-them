@@ -1,28 +1,28 @@
-
-const { Company, Worker } = require('../models');
+const { Empresa, Trabajador } = require('../models');
 const { Op } = require('sequelize');
 
 const dashboard = (req, res) => {
+  console.log('Accediendo al dashboard del admin');
   res.render('pages/adminDashboard', { title: 'Admin Dashboard', user: req.session.user });
 };
 
 const listCompanies = async (req, res) => {
   try {
     const searchQuery = req.query.search || '';
-    let companies;
+    let empresas;
 
     if (searchQuery) {
-      companies = await Company.findAll({
+      empresas = await Empresa.findAll({
         where: {
           active: true,
           name: { [Op.like]: `%${searchQuery}%` }
         }
       });
     } else {
-      companies = await Company.findAll({ where: { active: true } });
+      empresas = await Empresa.findAll({ where: { active: true } });
     }
     
-    res.render('pages/companies', { title: 'Lista de Empresas', companies, searchQuery });
+    res.render('pages/companies', { title: 'Lista de Empresas', empresas, searchQuery });
   } catch (error) {
     console.error(error);
     res.render('pages/companies', { title: 'Lista de Empresas', error: 'Error al obtener empresas' });
@@ -30,13 +30,13 @@ const listCompanies = async (req, res) => {
 };
 
 const getNewCompany = (req, res) => {
-  res.render('pages/newCompany', { title: 'Nueva Empresa' });
+  res.render('pages/newCompany', { title: 'Nueva Empresa', error: null });
 };
 
 const createCompany = async (req, res) => {
   try {
     const { name, headquarters, email, contact } = req.body;
-    await Company.create({ name, headquarters, email, contact, active: true });
+    await Empresa.create({ name, headquarters, email, contact, active: true });
     res.redirect('/admin/companies');
   } catch (error) {
     console.error(error);
@@ -46,9 +46,9 @@ const createCompany = async (req, res) => {
 
 const getEditCompany = async (req, res) => {
   try {
-    const company = await Company.findByPk(req.params.id);
-    if (!company) return res.redirect('/admin/companies');
-    res.render('pages/editCompany', { title: 'Editar Empresa', company });
+    const empresa = await Empresa.findByPk(req.params.id);
+    if (!empresa) return res.redirect('/admin/companies');
+    res.render('pages/editCompany', { title: 'Editar Empresa', empresa });
   } catch (error) {
     console.error(error);
     res.redirect('/admin/companies');
@@ -58,7 +58,7 @@ const getEditCompany = async (req, res) => {
 const updateCompany = async (req, res) => {
   try {
     const { name, headquarters, email, contact } = req.body;
-    await Company.update({ name, headquarters, email, contact }, { where: { id: req.params.id } });
+    await Empresa.update({ name, headquarters, email, contact }, { where: { id: req.params.id } });
     res.redirect('/admin/companies');
   } catch (error) {
     console.error(error);
@@ -68,7 +68,7 @@ const updateCompany = async (req, res) => {
 
 const deleteCompany = async (req, res) => {
   try {
-    await Company.update({ active: false }, { where: { id: req.params.id } });
+    await Empresa.update({ active: false }, { where: { id: req.params.id } });
     res.redirect('/admin/companies');
   } catch (error) {
     console.error(error);
@@ -78,9 +78,9 @@ const deleteCompany = async (req, res) => {
 
 const listWorkers = async (req, res) => {
   try {
-    const companyId = req.params.id;
-    const workers = await Worker.findAll({ where: { companyId, active: true } });
-    res.render('pages/workers', { title: 'Lista de Trabajadores', workers, companyId });
+    const empresaId = req.params.id;
+    const workers = await Trabajador.findAll({ where: { empresaId, active: true } });
+    res.render('pages/workers', { title: 'Lista de Trabajadores', workers, empresaId });
   } catch (error) {
     console.error(error);
     res.render('pages/workers', { title: 'Lista de Trabajadores', error: 'Error al obtener trabajadores' });
@@ -88,25 +88,25 @@ const listWorkers = async (req, res) => {
 };
 
 const getNewWorker = (req, res) => {
-  const companyId = req.params.id;
-  res.render('pages/newWorker', { title: 'Nuevo Trabajador', companyId });
+  const empresaId = req.params.id;
+  res.render('pages/newWorker', { title: 'Nuevo Trabajador', empresaId });
 };
 
 const createWorker = async (req, res) => {
   try {
-    const companyId = req.params.id;
+    const empresaId = req.params.id;
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Worker.create({
+    await Trabajador.create({
       firstName,
       secondName,
       lastName,
       motherLastName,
       position,
       location,
-      companyId,
+      empresaId,
       active: true
     });
-    res.redirect(`/admin/companies/${companyId}/workers`);
+    res.redirect(`/admin/companies/${empresaId}/workers`);
   } catch (error) {
     console.error(error);
     res.redirect(`/admin/companies/${req.params.id}/workers`);
@@ -115,10 +115,10 @@ const createWorker = async (req, res) => {
 
 const getEditWorker = async (req, res) => {
   try {
-    const companyId = req.params.id;
-    const worker = await Worker.findByPk(req.params.workerId);
-    if (!worker) return res.redirect(`/admin/companies/${companyId}/workers`);
-    res.render('pages/editWorker', { title: 'Editar Trabajador', worker, companyId });
+    const empresaId = req.params.id;
+    const worker = await Trabajador.findByPk(req.params.workerId);
+    if (!worker) return res.redirect(`/admin/companies/${empresaId}/workers`);
+    res.render('pages/editWorker', { title: 'Editar Trabajador', worker, empresaId });
   } catch (error) {
     console.error(error);
     res.redirect(`/admin/companies/${req.params.id}/workers`);
@@ -127,13 +127,13 @@ const getEditWorker = async (req, res) => {
 
 const updateWorker = async (req, res) => {
   try {
-    const companyId = req.params.id;
+    const empresaId = req.params.id;
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Worker.update(
+    await Trabajador.update(
       { firstName, secondName, lastName, motherLastName, position, location },
       { where: { id: req.params.workerId } }
     );
-    res.redirect(`/admin/companies/${companyId}/workers`);
+    res.redirect(`/admin/companies/${empresaId}/workers`);
   } catch (error) {
     console.error(error);
     res.redirect(`/admin/companies/${req.params.id}/workers`);
@@ -142,12 +142,12 @@ const updateWorker = async (req, res) => {
 
 const deleteWorker = async (req, res) => {
   try {
-    const companyId = req.params.id;
-    await Worker.update({ active: false }, { where: { id: req.params.workerId } });
-    res.redirect(`/admin/companies/${companyId}/workers`);
+    const empresaId = req.params.id;
+    await Trabajador.update({ active: false }, { where: { id: req.params.workerId } });
+    res.redirect(`/admin/companies/${empresaId}/workers`);
   } catch (error) {
     console.error(error);
-    res.redirect(`/admin/companies/${companyId}/workers`);
+    res.redirect(`/admin/companies/${empresaId}/workers`);
   }
 };
 

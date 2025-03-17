@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva Empresa</title>
+  <link rel="stylesheet" href="/css/newCompany.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <h1>Nueva Empresa</h1>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <form action="/admin/companies" method="POST">
+      <div class="form-group">
+        <label for="name">Nombre de la Empresa:</label>
+        <input type="text" name="name" id="name" required>
+      </div>
+      <div class="form-group">
+        <label for="headquarters">Casa Matriz (Sede):</label>
+        <input type="text" name="headquarters" id="headquarters" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" name="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label for="contact">Número de Contacto:</label>
+        <input type="text" name="contact" id="contact" required>
+      </div>
+      <button type="submit">Crear Empresa</button>
+    </form>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

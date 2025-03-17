@@ -9,17 +9,16 @@
 </head>
 <body>
   <%- include('../partials/header') %>
-
+  
   <main>
     <h1>Dashboard de Administrador</h1>
     <p>Bienvenido, <%= user.username %>!</p>
-    <p>Aquí podrás gestionar empresas, trabajadores y más.</p>
     <div class="dashboard-links">
       <a href="/admin/companies">Gestionar Empresas</a>
       <a href="/admin/companies/new">Crear Nueva Empresa</a>
     </div>
   </main>
-
+  
   <%- include('../partials/footer') %>
 </body>
 </html>
