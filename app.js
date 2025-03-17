@@ -21,6 +21,12 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
+
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 

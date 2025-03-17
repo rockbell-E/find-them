@@ -1,7 +1,11 @@
 <header>
   <nav>
     <a href="/">Inicio</a>
-    <% if (typeof user !== 'undefined' && user) { %>
+    <% if (user) { %>
+      <a href="/admin/dashboard">Dashboard</a>
+      <% if (user.role === 'admin') { %>
+        <a href="/admin/companies/new">Crear Empresa</a>
+      <% } %>
       <a href="/logout">Salir</a>
     <% } else { %>
       <a href="/login">Iniciar Sesión</a>
