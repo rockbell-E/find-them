@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/registerEmpresa.css">
+</head>
+<body>
+  <main>
+    <h1><%= title %></h1>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <form action="/register" method="POST">
+      <label for="name">Nombre de la Empresa:</label>
+      <input type="text" name="name" id="name" required>
+      
+      <label for="headquarters">Casa Matriz (Sede):</label>
+      <input type="text" name="headquarters" id="headquarters" required>
+      
+      <label for="email">Correo Electrónico:</label>
+      <input type="email" name="email" id="email" required>
+      
+      <label for="contact">Contacto:</label>
+      <input type="text" name="contact" id="contact" required>
+      
+      <button type="submit">Registrar Empresa</button>
+    </form>
+  </main>
+</body>
+</html>

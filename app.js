@@ -26,6 +26,9 @@ app.use((req, res, next) => {
   next();
 });
 
+const registerRouter = require('./routes/register');
+app.use('/', registerRouter);
+
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');

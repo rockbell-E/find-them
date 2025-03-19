@@ -1,4 +1,4 @@
-
+// models/empresa.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
@@ -17,6 +17,10 @@ const Empresa = sequelize.define('Empresa', {
     validate: {
       isEmail: true, 
     }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   contact: {
     type: DataTypes.STRING,

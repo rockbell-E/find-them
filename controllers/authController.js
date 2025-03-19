@@ -1,28 +1,23 @@
 
 const bcrypt = require('bcrypt');
-const { User } = require('../models'); 
+const { User } = require('../models');
 
 const getLogin = (req, res) => {
-  res.render('pages/login', { title: 'Iniciar Sesión' });
+  res.render('pages/login', { title: 'Iniciar Sesión', error: null });
 };
 
-// Procesa la autenticación del usuario
 const postLogin = async (req, res) => {
   try {
-    const { username, password } = req.body;
-
-    const user = await User.findOne({ where: { username } });
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.render('pages/login', { title: 'Iniciar Sesión', error: 'Usuario no encontrado' });
     }
-
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.render('pages/login', { title: 'Iniciar Sesión', error: 'Contraseña incorrecta' });
     }
-
-    req.session.user = { id: user.id, username: user.username, role: user.role, companyId: user.companyId };
-
+    req.session.user = { id: user.id, email: user.email, role: user.role };
     if (user.role === 'admin') {
       res.redirect('/admin/dashboard');
     } else {
