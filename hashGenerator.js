@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const plainPassword = ''; //ingresar contraseña para generar hash
+const plainPassword = '123'; //ingresar contraseña para generar hash
 
 bcrypt.hash(plainPassword, saltRounds, (err, hash) => {
   if (err) {
