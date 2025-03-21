@@ -1,4 +1,3 @@
-// models/empresa.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
@@ -18,10 +17,6 @@ const Empresa = sequelize.define('Empresa', {
       isEmail: true, 
     }
   },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   contact: {
     type: DataTypes.STRING,
     allowNull: false, 
@@ -31,8 +26,9 @@ const Empresa = sequelize.define('Empresa', {
     defaultValue: true,  
   }
 }, {
-  tableName: 'empresas',  
-  timestamps: true,      
+  tableName: 'empresas',
+  timestamps: true,
 });
+
 
 module.exports = Empresa;
