@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const { Empresa } = require('../models');
+const Empresa = require('../models/empresa');
 
 function generatePassword() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
@@ -33,7 +33,6 @@ router.post('/register', async (req, res) => {
     });
     
     console.log(`Contraseña temporal para ${email}: ${tempPassword}`);
-    
     res.redirect('/login');
   } catch (error) {
     console.error(error);
