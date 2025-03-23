@@ -44,10 +44,14 @@ app.use((req, res, next) => {
 });
 
 const { sequelize } = require('./models');
-sequelize.authenticate()
-  .then(() => console.log('Conexión establecida correctamente a la base de datos.'))
-  .catch(err => console.error('No se pudo conectar a la base de datos:', err));
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('La base de datos se ha sincronizado correctamente.');
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en el puerto ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Error al sincronizar la base de datos:', err);
+  });
