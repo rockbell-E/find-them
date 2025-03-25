@@ -27,7 +27,16 @@ const createWorker = async (req, res) => {
   try {
     const companyId = req.session.user.companyId;
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Trabajador.create({ firstName, secondName, lastName, motherLastName, position, location, companyId, active: true });
+    await Trabajador.create({
+      firstName,
+      secondName,
+      lastName,
+      motherLastName,
+      position,
+      location,
+      companyId,
+      active: true
+    });
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);
@@ -49,7 +58,10 @@ const getEditWorker = async (req, res) => {
 const updateWorker = async (req, res) => {
   try {
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Trabajador.update({ firstName, secondName, lastName, motherLastName, position, location }, { where: { id: req.params.workerId } });
+    await Trabajador.update(
+      { firstName, secondName, lastName, motherLastName, position, location },
+      { where: { id: req.params.workerId } }
+    );
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);

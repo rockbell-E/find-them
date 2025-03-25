@@ -1,4 +1,3 @@
-// controllers/unifiedAuthController.js
 const bcrypt = require('bcrypt');
 const { User, Empresa } = require('../models');
 
