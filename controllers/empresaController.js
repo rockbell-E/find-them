@@ -139,6 +139,7 @@ const deleteBranch = async (req, res) => {
 };
 
 const getChangePassword = (req, res) => {
+  console.log('Accediendo al cambio de pass de la empresa');
   res.render('pages/changePassword', { title: 'Cambiar Contraseña', error: null });
 };
 
