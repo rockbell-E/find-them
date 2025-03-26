@@ -36,6 +36,10 @@ const authRouter = require('./routes/auth');
 app.use('/', indexRouter);
 app.use('/', authRouter);
 
+const empresaRouter = require('./routes/empresa');
+app.use('/empresa', empresaRouter);
+
+
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
 
