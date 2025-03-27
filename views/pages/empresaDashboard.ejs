@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/empresaDashboard.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main>
+    <h1>Dashboard de Empresa</h1>
+    <p>Bienvenido, <%= user.email %>!</p>
+    <div class="dashboard-menu">
+      <a href="/empresa/workers">Gestionar Trabajadores</a>
+      <a href="/empresa/branches">Gestionar Sucursales</a>
+      <a href="/empresa/changePassword">Cambiar Contraseña</a>
+    </div>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
