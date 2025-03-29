@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/branches.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main>
+    <h1><%= title %></h1>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <% if (branches && branches.length > 0) { %>
+      <ul class="branch-list">
+        <% branches.forEach(function(branch) { %>
+          <li>
+            <div class="branch-info">
+              <strong><%= branch.name %></strong> - <%= branch.location %>
+            </div>
+            <div class="branch-actions">
+              <a href="/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
+              <form action="/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;"> 
+                <button type="submit" class="btn-delete" onclick="return confirm('¿Seguro que deseas desactivar esta sucursal?');">Desactivar</button>
+              </form>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No se encontraron sucursales.</p>
+    <% } %>
+    <a href="/branches/new" class="btn-new">Crear Nueva Sucursal</a>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
