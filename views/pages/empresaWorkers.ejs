@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/empresaWorkers.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main>
+    <h1><%= title %></h1>
+    
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    
+    <% if (workers && workers.length > 0) { %>
+      <ul class="worker-list">
+        <% workers.forEach(function(worker) { %>
+          <li>
+            <div class="worker-info">
+              <strong><%= worker.firstName %> <%= worker.lastName %></strong><br>
+              Cargo: <%= worker.position %><br>
+              Ubicación: <%= worker.location %>
+            </div>
+            <div class="worker-actions">
+              <a href="/empresa/workers/<%= worker.id %>/edit" class="btn-edit">Editar</a>
+              <form action="/empresa/workers/<%= worker.id %>/delete" method="POST" style="display:inline-block;"> 
+                <button type="submit" class="btn-delete" onclick="return confirm('¿Seguro que deseas desactivar este trabajador?');">Desactivar</button>
+              </form>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No se encontraron trabajadores.</p>
+    <% } %>
+    
+    <a href="/empresa/workers/new" class="btn-new">Agregar Trabajador</a>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
