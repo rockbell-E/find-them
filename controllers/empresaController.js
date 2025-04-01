@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { Trabajador, Branch, Empresa } = require('../models');
+const { Trabajador, Sucursal, Empresa } = require('../models');
 
 const dashboard = (req, res) => {
   if (req.session.user && req.session.user.firstLogin) {
@@ -82,13 +82,14 @@ const deleteWorker = async (req, res) => {
 const listBranches = async (req, res) => {
   try {
     const companyId = req.session.user.companyId;
-    const branches = await Branch.findAll({ where: { companyId, active: true } });
+    const branches = await Sucursal.findAll({ where: { empresaId: companyId, active: true } });
     res.render('pages/branches', { title: 'Lista de Sucursales', branches, error: null });
   } catch (error) {
     console.error(error);
     res.render('pages/branches', { title: 'Lista de Sucursales', branches: [], error: 'Error al obtener sucursales' });
   }
 };
+
 
 const getNewBranch = (req, res) => {
   res.render('pages/newBranch', { title: 'Nueva Sucursal', error: null });
@@ -98,13 +99,14 @@ const createBranch = async (req, res) => {
   try {
     const companyId = req.session.user.companyId;
     const { name, location } = req.body;
-    await Branch.create({ name, location, companyId, active: true });
+    await Sucursal.create({ name, location, empresaId: companyId, active: true });
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);
     res.redirect('/empresa/branches');
   }
 };
+
 
 const getEditBranch = async (req, res) => {
   try {
