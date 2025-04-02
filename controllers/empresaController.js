@@ -10,14 +10,15 @@ const dashboard = (req, res) => {
 
 const listWorkers = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId;
-    const workers = await Trabajador.findAll({ where: { companyId, active: true } });
+    const companyId = req.session.user.companyId || req.session.user.id;
+    const workers = await Trabajador.findAll({ where: { empresaId: companyId, active: true } });
     res.render('pages/empresaWorkers', { title: 'Lista de Trabajadores', workers, error: null });
   } catch (error) {
     console.error(error);
     res.render('pages/empresaWorkers', { title: 'Lista de Trabajadores', workers: [], error: 'Error al obtener trabajadores' });
   }
 };
+
 
 const getNewWorker = (req, res) => {
   res.render('pages/empresaNewWorker', { title: 'Nuevo Trabajador', error: null });
