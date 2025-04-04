@@ -43,6 +43,9 @@ app.use('/empresa', empresaRouter);
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
 
+const cargoRouter = require('./routes/cargo');
+app.use('/', cargoRouter);
+
 app.use((req, res, next) => {
   res.status(404).render('errors/404', { title: 'Página no encontrada' });
 });

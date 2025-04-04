@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/cargos.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main>
+    <h1><%= title %></h1>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <% if (cargos && cargos.length > 0) { %>
+      <ul class="cargo-list">
+        <% cargos.forEach(function(cargo) { %>
+          <li>
+            <span><%= cargo.name %></span>
+            <div class="cargo-actions">
+              <a href="/cargos/<%= cargo.id %>/edit" class="btn-edit">Editar</a>
+              <form action="/cargos/<%= cargo.id %>/delete" method="POST" style="display:inline-block;"> 
+                <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar este cargo?');">Eliminar</button>
+              </form>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No se encontraron cargos.</p>
+    <% } %>
+    <a href="/cargos/new" class="btn-new">Crear Nuevo Cargo</a>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

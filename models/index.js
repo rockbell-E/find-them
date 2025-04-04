@@ -5,6 +5,7 @@ const User = require('./user');
 const Empresa = require('./empresa');
 const Trabajador = require('./trabajador');
 const Sucursal = require('./sucursal');
+const Cargo = require('./cargo');
 
 Empresa.hasMany(Trabajador, { foreignKey: 'empresaId', as: 'trabajadores' });
 Trabajador.belongsTo(Empresa, { foreignKey: 'empresaId', as: 'empresa' });
@@ -17,5 +18,6 @@ module.exports = {
   User,
   Empresa,
   Trabajador,
-  Sucursal
+  Sucursal,
+  Cargo
 };
