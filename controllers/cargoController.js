@@ -19,7 +19,7 @@ const createCargo = async (req, res) => {
   try {
     const { name } = req.body;
     await Cargo.create({ name });
-    res.redirect('/cargos');
+    res.redirect('/empresa/cargos');
   } catch (error) {
     console.error(error);
     res.render('pages/newCargo', { title: 'Nuevo Cargo', error: 'Error al crear cargo' });
@@ -29,11 +29,11 @@ const createCargo = async (req, res) => {
 const getEditCargo = async (req, res) => {
   try {
     const cargo = await Cargo.findByPk(req.params.id);
-    if (!cargo) return res.redirect('/cargos');
+    if (!cargo) return res.redirect('/empresa/cargos');
     res.render('pages/editCargo', { title: 'Editar Cargo', cargo, error: null });
   } catch (error) {
     console.error(error);
-    res.redirect('/cargos');
+    res.redirect('/empresa/cargos');
   }
 };
 
@@ -41,20 +41,20 @@ const updateCargo = async (req, res) => {
   try {
     const { name } = req.body;
     await Cargo.update({ name }, { where: { id: req.params.id } });
-    res.redirect('/cargos');
+    res.redirect('/empresa/cargos');
   } catch (error) {
     console.error(error);
-    res.redirect('/cargos');
+    res.redirect('/empresa/cargos');
   }
 };
 
 const deleteCargo = async (req, res) => {
   try {
     await Cargo.destroy({ where: { id: req.params.id } });
-    res.redirect('/cargos');
+    res.redirect('/empresa/cargos');
   } catch (error) {
     console.error(error);
-    res.redirect('/cargos');
+    res.redirect('/empresa/cargos');
   }
 };
 
