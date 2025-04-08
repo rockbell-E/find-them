@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/editCargo.css">
+  <link rel="stylesheet" href="/css/header-footer.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main>
+    <h1><%= title %></h1>
+    
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    
+    <% if (cargo) { %>
+      <form action="/empresa/cargos/<%= cargo.id %>" method="POST">
+        <div class="form-group">
+          <label for="name">Nombre del Cargo:</label>
+          <input type="text" id="name" name="name" value="<%= cargo.name %>" required>
+        </div>
+        <button type="submit">Actualizar Cargo</button>
+      </form>
+    <% } else { %>
+      <p>Cargo no encontrado.</p>
+    <% } %>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
