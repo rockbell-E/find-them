@@ -22,9 +22,9 @@
             <span><%= cargo.name %></span>
             <div class="cargo-actions">
               <a href="/cargos/<%= cargo.id %>/edit" class="btn-edit">Editar</a>
-              <form action="/cargos/<%= cargo.id %>/delete" method="POST" style="display:inline-block;"> 
+              <form action="/empresa/cargos/<%= cargo.id %>/delete" method="POST" style="display:inline-block;"> 
                 <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar este cargo?');">Eliminar</button>
-              </form>
+              </form>              
             </div>
           </li>
         <% }); %>
