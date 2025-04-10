@@ -23,7 +23,7 @@
               <strong><%= branch.name %></strong> - <%= branch.location %>
             </div>
             <div class="branch-actions">
-              <a href="/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
+              <a href="/empresa/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
               <form action="/empresa/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;"> 
                 <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">Eliminar</button>
               </form>              

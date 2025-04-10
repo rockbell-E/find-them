@@ -111,7 +111,7 @@ const createBranch = async (req, res) => {
 
 const getEditBranch = async (req, res) => {
   try {
-    const branch = await Branch.findByPk(req.params.branchId);
+    const branch = await Sucursal.findByPk(req.params.branchId);
     if (!branch) return res.redirect('/empresa/branches');
     res.render('pages/editBranch', { title: 'Editar Sucursal', branch, error: null });
   } catch (error) {
@@ -123,7 +123,7 @@ const getEditBranch = async (req, res) => {
 const updateBranch = async (req, res) => {
   try {
     const { name, location } = req.body;
-    await Branch.update({ name, location }, { where: { id: req.params.branchId } });
+    await Sucursal.update({ name, location }, { where: { id: req.params.branchId } });
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);
