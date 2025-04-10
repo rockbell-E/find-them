@@ -133,7 +133,7 @@ const updateBranch = async (req, res) => {
 
 const deleteBranch = async (req, res) => {
   try {
-    await Branch.update({ active: false }, { where: { id: req.params.branchId } });
+    await Sucursal.update({ active: false }, { where: { id: req.params.branchId } });
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);

@@ -24,9 +24,9 @@
             </div>
             <div class="branch-actions">
               <a href="/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
-              <form action="/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;"> 
-                <button type="submit" class="btn-delete" onclick="return confirm('¿Seguro que deseas desactivar esta sucursal?');">Desactivar</button>
-              </form>
+              <form action="/empresa/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;"> 
+                <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">Eliminar</button>
+              </form>              
             </div>
           </li>
         <% }); %>
