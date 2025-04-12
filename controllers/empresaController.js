@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { Trabajador, Sucursal, Empresa } = require('../models');
+const { Trabajador, Sucursal, Empresa, Cargo } = require('../models');
 
 const dashboard = (req, res) => {
   if (req.session.user && req.session.user.firstLogin) {
@@ -20,8 +20,27 @@ const listWorkers = async (req, res) => {
 };
 
 
-const getNewWorker = (req, res) => {
-  res.render('pages/empresaNewWorker', { title: 'Nuevo Trabajador', error: null });
+const getNewWorker = async (req, res) => {
+  try {
+    const companyId = req.session.user.companyId;
+    const cargos = await Cargo.findAll({ where: { empresaId: companyId, active: true } });
+    const sucursales = await Sucursal.findAll({ where: { empresaId: companyId, active: true } });
+
+    res.render('pages/empresaNewWorker', {
+      title: 'Nuevo Trabajador',
+      cargos,
+      sucursales,
+      error: null
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('pages/empresaNewWorker', {
+      title: 'Nuevo Trabajador',
+      cargos: [],
+      sucursales: [],
+      error: 'Error al obtener datos'
+    });
+  }
 };
 
 const createWorker = async (req, res) => {
