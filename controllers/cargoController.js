@@ -17,8 +17,11 @@ const getNewCargo = (req, res) => {
 
 const createCargo = async (req, res) => {
   try {
+    const empresaId = req.session.user.companyId || req.session.user.id;
     const { name } = req.body;
-    await Cargo.create({ name });
+    
+    await Cargo.create({ name, empresaId, active: true });
+    
     res.redirect('/empresa/cargos');
   } catch (error) {
     console.error(error);
