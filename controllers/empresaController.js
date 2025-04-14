@@ -22,7 +22,8 @@ const listWorkers = async (req, res) => {
 
 const getNewWorker = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId;
+    const companyId = req.session.user.companyId || req.session.user.id;
+
     const cargos = await Cargo.findAll({ where: { empresaId: companyId, active: true } });
     const sucursales = await Sucursal.findAll({ where: { empresaId: companyId, active: true } });
 
@@ -43,9 +44,10 @@ const getNewWorker = async (req, res) => {
   }
 };
 
+
 const createWorker = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId;
+    const empresaId = req.session.user.companyId || req.session.user.id;
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
     await Trabajador.create({
       firstName,
@@ -54,7 +56,7 @@ const createWorker = async (req, res) => {
       motherLastName,
       position,
       location,
-      companyId,
+      empresaId,
       active: true
     });
     res.redirect('/empresa/workers');
@@ -63,6 +65,7 @@ const createWorker = async (req, res) => {
     res.redirect('/empresa/workers');
   }
 };
+
 
 const getEditWorker = async (req, res) => {
   try {

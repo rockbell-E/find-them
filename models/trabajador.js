@@ -30,7 +30,11 @@ const Trabajador = sequelize.define('Trabajador', {
   active: {
     type: DataTypes.BOOLEAN,
     defaultValue: true, 
-  }
+  },
+  empresaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 }, {
   tableName: 'trabajadores', 
   timestamps: true, 
