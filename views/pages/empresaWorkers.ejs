@@ -17,19 +17,58 @@
       <p class="error"><%= error %></p>
     <% } %>
     
+    <div class="filters">
+      <input 
+        type="text" 
+        id="filterName" 
+        placeholder="Buscar por nombre…" 
+      >
+      
+      <select id="filterPosition">
+        <option value="">Todos los cargos</option>
+        <% cargos.forEach(function(cargo) { %>
+          <option value="<%= cargo.name %>"><%= cargo.name %></option>
+        <% }) %>
+      </select>
+      
+      <select id="filterLocation">
+        <option value="">Todas las ubicaciones</option>
+        <% sucursales.forEach(function(sucursal) { %>
+          <option value="<%= sucursal.name %>"><%= sucursal.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
     <% if (workers && workers.length > 0) { %>
-      <ul class="worker-list">
+      <ul class="worker-list" id="workerList">
         <% workers.forEach(function(worker) { %>
-          <li>
+          <li class="worker-item">
             <div class="worker-info">
-              <strong><%= worker.firstName %> <%= worker.lastName %></strong><br>
-              Cargo: <%= worker.position %><br>
-              Ubicación: <%= worker.location %>
+              <strong class="w-name">
+                <%= worker.firstName %> <%= worker.lastName %>
+              </strong><br>
+              <span class="w-position">
+                Cargo: <%= worker.position %>
+              </span><br>
+              <span class="w-location">
+                Ubicación: <%= worker.location %>
+              </span>
             </div>
             <div class="worker-actions">
-              <a href="/empresa/workers/<%= worker.id %>/edit" class="btn-edit">Editar</a>
-              <form action="/empresa/workers/<%= worker.id %>/delete" method="POST" style="display:inline-block;"> 
-                <button type="submit" class="btn-delete" onclick="return confirm('¿Seguro que deseas desactivar este trabajador?');">Desactivar</button>
+              <a 
+                href="/empresa/workers/<%= worker.id %>/edit" 
+                class="btn-edit"
+              >Editar</a>
+              <form 
+                action="/empresa/workers/<%= worker.id %>/delete" 
+                method="POST" 
+                style="display:inline-block;"
+              >
+                <button 
+                  type="submit" 
+                  class="btn-delete" 
+                  onclick="return confirm('¿Seguro que deseas desactivar este trabajador?');"
+                >Desactivar</button>
               </form>
             </div>
           </li>
@@ -42,6 +81,6 @@
     <a href="/empresa/workers/new" class="btn-new">Agregar Trabajador</a>
   </main>
   
-  <%- include('../partials/footer') %>
+  <script src="/js/empresaWorkers.js"></script>
 </body>
 </html>

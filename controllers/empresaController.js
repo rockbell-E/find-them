@@ -11,13 +11,38 @@ const dashboard = (req, res) => {
 const listWorkers = async (req, res) => {
   try {
     const companyId = req.session.user.companyId || req.session.user.id;
-    const workers = await Trabajador.findAll({ where: { empresaId: companyId, active: true } });
-    res.render('pages/empresaWorkers', { title: 'Lista de Trabajadores', workers, error: null });
+
+    const workers = await Trabajador.findAll({
+      where: { empresaId: companyId, active: true }
+    });
+
+    const cargos = await Cargo.findAll({
+      where: { empresaId: companyId, active: true }
+    });
+
+    const sucursales = await Sucursal.findAll({
+      where: { empresaId: companyId, active: true }
+    });
+
+    res.render('pages/empresaWorkers', {
+      title: 'Lista de Trabajadores',
+      workers,
+      cargos,
+      sucursales,
+      error: null
+    });
   } catch (error) {
     console.error(error);
-    res.render('pages/empresaWorkers', { title: 'Lista de Trabajadores', workers: [], error: 'Error al obtener trabajadores' });
+    res.render('pages/empresaWorkers', {
+      title: 'Lista de Trabajadores',
+      workers: [],
+      cargos: [],
+      sucursales: [],
+      error: 'Error al obtener trabajadores'
+    });
   }
 };
+
 
 
 const getNewWorker = async (req, res) => {
