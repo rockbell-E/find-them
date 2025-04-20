@@ -15,17 +15,29 @@
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
+
+    <div class="filter-branch">
+      <input
+        type="text"
+        id="filterBranchName"
+        placeholder="Buscar sucursal por nombre…"
+      >
+    </div>
+
     <% if (branches && branches.length > 0) { %>
-      <ul class="branch-list">
+      <ul class="branch-list" id="branchList">
         <% branches.forEach(function(branch) { %>
-          <li>
+          <li class="branch-item">
             <div class="branch-info">
-              <strong><%= branch.name %></strong> - <%= branch.location %>
+              <strong class="b-name"><%= branch.name %></strong> – <span class="b-location"><%= branch.location %></span>
             </div>
             <div class="branch-actions">
               <a href="/empresa/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
               <form action="/empresa/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;"> 
-                <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">Eliminar</button>
+                <button type="submit" class="btn-delete"
+                  onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">
+                  Eliminar
+                </button>
               </form>              
             </div>
           </li>
@@ -34,9 +46,12 @@
     <% } else { %>
       <p>No se encontraron sucursales.</p>
     <% } %>
+    
     <a href="/empresa/branches/new" class="btn-new">Crear Nueva Sucursal</a>
   </main>
   
   <%- include('../partials/footer') %>
+  
+  <script src="/js/branches.js"></script>
 </body>
 </html>
