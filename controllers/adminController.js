@@ -1,5 +1,16 @@
 const { Empresa, Trabajador } = require('../models');
 const { Op } = require('sequelize');
+const bcrypt = require('bcrypt');
+
+function generatePassword() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
 
 const dashboard = (req, res) => {
   console.log('Accediendo al dashboard del admin');
@@ -36,11 +47,29 @@ const getNewCompany = (req, res) => {
 const createCompany = async (req, res) => {
   try {
     const { name, headquarters, email, contact } = req.body;
-    await Empresa.create({ name, headquarters, email, contact, active: true });
+
+    const tempPassword   = generatePassword();
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+    const empresa = await Empresa.create({
+      name,
+      headquarters,
+      email,
+      contact,
+      password:    hashedPassword,
+      active:      true,
+      firstLogin:  true
+    });
+
+    console.log(`🔐 Contraseña temporal para ${empresa.email}: ${tempPassword}`);
+
     res.redirect('/admin/companies');
   } catch (error) {
     console.error(error);
-    res.render('pages/newCompany', { title: 'Nueva Empresa', error: 'Error al crear la empresa' });
+    res.render('pages/newCompany', {
+      title: 'Nueva Empresa',
+      error: 'Error al crear la empresa'
+    });
   }
 };
 
