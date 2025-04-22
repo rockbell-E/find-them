@@ -1,4 +1,3 @@
-
 main {
   max-width: 800px;
   margin: 2rem auto;
@@ -14,12 +13,39 @@ h1 {
   margin-bottom: 1rem;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.error {
+  color: #DC3545;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
-li {
+.filter-company {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.filter-company input {
+  width: 80%;
+  max-width: 400px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.filter-company input::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+ul.company-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li.company-item {
   padding: 0.75rem;
   border-bottom: 1px solid #ccc;
   display: flex;
@@ -27,7 +53,8 @@ li {
   justify-content: space-between;
 }
 
-li strong {
+li.company-item .company-info strong,
+li.company-item .company-info {
   margin-right: 1rem;
 }
 
@@ -59,10 +86,4 @@ li strong {
 
 .btn-delete:hover {
   background-color: #C82333;
-}
-
-.error {
-  color: #DC3545;
-  text-align: center;
-  margin-bottom: 1rem;
 }

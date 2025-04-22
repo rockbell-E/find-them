@@ -16,17 +16,30 @@
       <p class="error"><%= error %></p>
     <% } %>
 
+    <div class="filter-company">
+      <input
+        type="text"
+        id="filterCompanyName"
+        placeholder="Buscar empresa por nombre…"
+      >
+    </div>
+
     <% if (empresas && empresas.length > 0) { %>
-      <ul>
+      <ul class="company-list" id="companyList">
         <% empresas.forEach(function(empresa) { %>
-          <li>
-            <strong><%= empresa.name %></strong> - <%= empresa.email %>
-            <a href="/admin/companies/<%= empresa.id %>/edit" class="btn-edit">Editar</a>
-            <form action="/admin/companies/<%= empresa.id %>/delete" method="POST" style="display: inline;">
-              <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta empresa?');">
-                Eliminar
-              </button>
-            </form>
+          <li class="company-item">
+            <div class="company-info">
+              <strong class="c-name"><%= empresa.name %></strong> – <%= empresa.email %>
+            </div>
+            <div class="company-actions">
+              <a href="/admin/companies/<%= empresa.id %>/edit" class="btn-edit">Editar</a>
+              <form action="/admin/companies/<%= empresa.id %>/delete" method="POST" style="display: inline;">
+                <button type="submit" class="btn-delete"
+                  onclick="return confirm('¿Estás seguro de eliminar esta empresa?');">
+                  Eliminar
+                </button>
+              </form>
+            </div>
           </li>
         <% }); %>
       </ul>
@@ -36,5 +49,6 @@
   </main>
 
   <%- include('../partials/footer') %>
+  <script src="/js/companies.js"></script>
 </body>
 </html>
