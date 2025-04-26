@@ -94,9 +94,21 @@ const createWorker = async (req, res) => {
 
 const getEditWorker = async (req, res) => {
   try {
+    const empresaId = req.session.user.companyId || req.session.user.id;
+
     const worker = await Trabajador.findByPk(req.params.workerId);
     if (!worker) return res.redirect('/empresa/workers');
-    res.render('pages/empresaEditWorker', { title: 'Editar Trabajador', worker, error: null });
+
+    const cargos      = await Cargo.findAll({ where: { empresaId, active: true } });
+    const sucursales  = await Sucursal.findAll({ where: { empresaId, active: true } });
+
+    res.render('pages/empresaEditWorker', {
+      title:      'Editar Trabajador',
+      worker,
+      cargos,
+      sucursales,
+      error:      null
+    });
   } catch (error) {
     console.error(error);
     res.redirect('/empresa/workers');

@@ -36,11 +36,25 @@
         </div>
         <div class="form-group">
           <label for="position">Cargo:</label>
-          <input type="text" id="position" name="position" value="<%= worker.position %>" required>
+          <select id="position" name="position" required>
+            <% cargos.forEach(cargo => { %>
+              <option 
+                value="<%= cargo.name %>" 
+                <%= cargo.name === worker.position ? 'selected' : '' %>
+              ><%= cargo.name %></option>
+            <% }) %>
+          </select>
         </div>
         <div class="form-group">
           <label for="location">Ubicación:</label>
-          <input type="text" id="location" name="location" value="<%= worker.location %>" required>
+          <select id="location" name="location" required>
+            <% sucursales.forEach(s => { %>
+              <option 
+                value="<%= s.name %>" 
+                <%= s.name === worker.location ? 'selected' : '' %>
+              ><%= s.name %></option>
+            <% }) %>
+          </select>
         </div>
         <button type="submit">Actualizar Trabajador</button>
       </form>
