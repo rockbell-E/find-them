@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
+const { listLogs } = require('../controllers/logController');
 
 router.use((req, res, next) => {
   if (req.session.user && req.session.user.role === 'admin') {
@@ -24,5 +25,7 @@ router.post('/companies/:id/workers', adminController.createWorker);
 router.get('/companies/:id/workers/:workerId/edit', adminController.getEditWorker);
 router.post('/companies/:id/workers/:workerId', adminController.updateWorker);
 router.post('/companies/:id/workers/:workerId/delete', adminController.deleteWorker);
+
+router.get('/logs', listLogs);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { Trabajador, Sucursal, Empresa, Cargo } = require('../models');
+const { Trabajador, Sucursal, Empresa, Cargo, Log } = require('../models');
 
 const dashboard = (req, res) => {
   if (req.session.user && req.session.user.firstLogin) {
@@ -10,19 +10,14 @@ const dashboard = (req, res) => {
 
 const listWorkers = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId || req.session.user.id;
+    const empresaId = req.session.user.companyId || req.session.user.id;
 
     const workers = await Trabajador.findAll({
-      where: { empresaId: companyId, active: true }
+      where: { empresaId, active: true }
     });
 
-    const cargos = await Cargo.findAll({
-      where: { empresaId: companyId, active: true }
-    });
-
-    const sucursales = await Sucursal.findAll({
-      where: { empresaId: companyId, active: true }
-    });
+    const cargos = await Cargo.findAll({ where: { empresaId, active: true } });
+    const sucursales = await Sucursal.findAll({ where: { empresaId, active: true } });
 
     res.render('pages/empresaWorkers', {
       title: 'Lista de Trabajadores',
@@ -43,14 +38,11 @@ const listWorkers = async (req, res) => {
   }
 };
 
-
-
 const getNewWorker = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId || req.session.user.id;
-
-    const cargos = await Cargo.findAll({ where: { empresaId: companyId, active: true } });
-    const sucursales = await Sucursal.findAll({ where: { empresaId: companyId, active: true } });
+    const empresaId = req.session.user.companyId || req.session.user.id;
+    const cargos = await Cargo.findAll({ where: { empresaId, active: true } });
+    const sucursales = await Sucursal.findAll({ where: { empresaId, active: true } });
 
     res.render('pages/empresaNewWorker', {
       title: 'Nuevo Trabajador',
@@ -69,12 +61,13 @@ const getNewWorker = async (req, res) => {
   }
 };
 
-
 const createWorker = async (req, res) => {
   try {
     const empresaId = req.session.user.companyId || req.session.user.id;
+    const usuarioId = req.session.user.id;
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
-    await Trabajador.create({
+
+    const worker = await Trabajador.create({
       firstName,
       secondName,
       lastName,
@@ -84,6 +77,16 @@ const createWorker = async (req, res) => {
       empresaId,
       active: true
     });
+
+    await Log.create({
+      empresaId,
+      usuarioId,
+      entidad: 'Trabajador',
+      entidadId: worker.id,
+      accion: 'create',
+      cambios: worker.toJSON()
+    });
+
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);
@@ -91,23 +94,21 @@ const createWorker = async (req, res) => {
   }
 };
 
-
 const getEditWorker = async (req, res) => {
   try {
     const empresaId = req.session.user.companyId || req.session.user.id;
-
     const worker = await Trabajador.findByPk(req.params.workerId);
     if (!worker) return res.redirect('/empresa/workers');
 
-    const cargos      = await Cargo.findAll({ where: { empresaId, active: true } });
-    const sucursales  = await Sucursal.findAll({ where: { empresaId, active: true } });
+    const cargos = await Cargo.findAll({ where: { empresaId, active: true } });
+    const sucursales = await Sucursal.findAll({ where: { empresaId, active: true } });
 
     res.render('pages/empresaEditWorker', {
-      title:      'Editar Trabajador',
+      title: 'Editar Trabajador',
       worker,
       cargos,
       sucursales,
-      error:      null
+      error: null
     });
   } catch (error) {
     console.error(error);
@@ -117,11 +118,27 @@ const getEditWorker = async (req, res) => {
 
 const updateWorker = async (req, res) => {
   try {
+    const empresaId = req.session.user.companyId || req.session.user.id;
+    const usuarioId = req.session.user.id;
+    const workerId = req.params.workerId;
+    const before = await Trabajador.findByPk(workerId);
     const { firstName, secondName, lastName, motherLastName, position, location } = req.body;
+
     await Trabajador.update(
       { firstName, secondName, lastName, motherLastName, position, location },
-      { where: { id: req.params.workerId } }
+      { where: { id: workerId } }
     );
+
+    const after = await Trabajador.findByPk(workerId);
+    await Log.create({
+      empresaId,
+      usuarioId,
+      entidad: 'Trabajador',
+      entidadId: workerId,
+      accion: 'update',
+      cambios: { before: before.toJSON(), after: after.toJSON() }
+    });
+
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);
@@ -131,7 +148,20 @@ const updateWorker = async (req, res) => {
 
 const deleteWorker = async (req, res) => {
   try {
-    await Trabajador.update({ active: false }, { where: { id: req.params.workerId } });
+    const empresaId = req.session.user.companyId || req.session.user.id;
+    const usuarioId = req.session.user.id;
+    const workerId = req.params.workerId;
+
+    await Trabajador.update({ active: false }, { where: { id: workerId } });
+    await Log.create({
+      empresaId,
+      usuarioId,
+      entidad: 'Trabajador',
+      entidadId: workerId,
+      accion: 'delete',
+      cambios: { active: false }
+    });
+
     res.redirect('/empresa/workers');
   } catch (error) {
     console.error(error);
@@ -150,23 +180,24 @@ const listBranches = async (req, res) => {
   }
 };
 
-
 const getNewBranch = (req, res) => {
   res.render('pages/newBranch', { title: 'Nueva Sucursal', error: null });
 };
 
 const createBranch = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId;
+    const empresaId = req.session.user.companyId;
+    const usuarioId = req.session.user.id;
     const { name, location } = req.body;
-    await Sucursal.create({ name, location, empresaId: companyId, active: true });
+
+    const branch = await Sucursal.create({ name, location, empresaId, active: true });
+    await Log.create({ empresaId, usuarioId, entidad: 'Sucursal', entidadId: branch.id, accion: 'create', cambios: branch.toJSON() });
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);
     res.redirect('/empresa/branches');
   }
 };
-
 
 const getEditBranch = async (req, res) => {
   try {
@@ -181,8 +212,16 @@ const getEditBranch = async (req, res) => {
 
 const updateBranch = async (req, res) => {
   try {
+    const empresaId = req.session.user.companyId;
+    const usuarioId = req.session.user.id;
+    const branchId = req.params.branchId;
+    const before = await Sucursal.findByPk(branchId);
     const { name, location } = req.body;
-    await Sucursal.update({ name, location }, { where: { id: req.params.branchId } });
+
+    await Sucursal.update({ name, location }, { where: { id: branchId } });
+    const after = await Sucursal.findByPk(branchId);
+    await Log.create({ empresaId, usuarioId, entidad: 'Sucursal', entidadId: branchId, accion: 'update', cambios: { before: before.toJSON(), after: after.toJSON() } });
+
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);
@@ -192,7 +231,13 @@ const updateBranch = async (req, res) => {
 
 const deleteBranch = async (req, res) => {
   try {
-    await Sucursal.update({ active: false }, { where: { id: req.params.branchId } });
+    const empresaId = req.session.user.companyId;
+    const usuarioId = req.session.user.id;
+    const branchId = req.params.branchId;
+
+    await Sucursal.update({ active: false }, { where: { id: branchId } });
+    await Log.create({ empresaId, usuarioId, entidad: 'Sucursal', entidadId: branchId, accion: 'delete', cambios: { active: false } });
+
     res.redirect('/empresa/branches');
   } catch (error) {
     console.error(error);
@@ -210,7 +255,11 @@ const postChangePassword = async (req, res) => {
     const { newPassword } = req.body;
     const empresaId = req.session.user.id;
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const before = await Empresa.findByPk(empresaId);
     await Empresa.update({ password: hashedPassword, firstLogin: false }, { where: { id: empresaId } });
+    await Log.create({ empresaId, usuarioId: empresaId, entidad: 'Empresa', entidadId: empresaId, accion: 'update', cambios: { before: before.toJSON(), after: { firstLogin: false } } });
+
     req.session.user.firstLogin = false;
     res.redirect('/empresa/dashboard');
   } catch (error) {

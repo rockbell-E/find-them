@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/logs.css"/>
+  <link rel="stylesheet" href="/css/header-footer.css"/>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <h1><%= title %></h1>
+
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <% if (logs && logs.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Entidad</th>
+            <th>ID</th>
+            <th>Acción</th>
+            <th>Cambios</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% logs.forEach(log => { %>
+            <tr>
+              <td data-label="Fecha"><%= log.createdAt.toLocaleString() %></td>
+              <td data-label="Usuario"><%= log.usuarioId %></td>
+              <td data-label="Entidad"><%= log.entidad %></td>
+              <td data-label="ID"><%= log.entidadId %></td>
+              <td data-label="Acción"><%= log.accion %></td>
+              <td data-label="Cambios"><pre><%= JSON.stringify(log.cambios, null, 2) %></pre></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>No hay registros de cambios para mostrar.</p>
+    <% } %>
+
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

@@ -5,6 +5,7 @@
       <% if(user.role === 'admin') { %>
         <a href="/admin/dashboard">Dashboard</a>
         <a href="/admin/companies/new">Crear Empresa</a>
+        <a href="/admin/logs">Ver Logs</a>
       <% } else if(user.role === 'empresa') { %>
         <a href="/empresa/dashboard">Dashboard</a>
         <a href="/empresa/workers">Trabajadores</a>

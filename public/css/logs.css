@@ -1,0 +1,86 @@
+/* public/css/logs.css */
+
+body {
+    background-color: #F8F9FA;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #0D6EFD;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+  }
+  
+  thead {
+    background-color: #0D6EFD;
+    color: #fff;
+  }
+  
+  thead th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: normal;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #F1F3F5;
+  }
+  
+  tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+  
+  .error {
+    color: #DC3545;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+  
+    thead {
+      display: none;
+    }
+  
+    tr {
+      margin-bottom: 1rem;
+    }
+  
+    td {
+      position: relative;
+      padding-left: 50%;
+    }
+  
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0.75rem;
+      width: calc(50% - 1.5rem);
+      font-weight: bold;
+      white-space: nowrap;
+    }
+  }
+  
