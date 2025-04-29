@@ -12,9 +12,36 @@
 
   <main>
     <h1><%= title %></h1>
+
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
+
+    <!-- Sección de filtros -->
+    <form method="GET" action="/admin/logs" class="log-filters">
+      <div class="filter-group">
+        <label for="email">Correo empresa:</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="ej: tienda@ejemplo.com"
+          value="<%= filters.email %>"
+        />
+      </div>
+      <div class="filter-group">
+        <label for="action">Acción:</label>
+        <select id="action" name="action">
+          <option value="">Todas</option>
+          <option value="create"  <%= filters.action==='create'  ? 'selected' : '' %>>Crear</option>
+          <option value="update"  <%= filters.action==='update'  ? 'selected' : '' %>>Actualizar</option>
+          <option value="delete"  <%= filters.action==='delete'  ? 'selected' : '' %>>Eliminar</option>
+        </select>
+      </div>
+      <button type="submit">Filtrar</button>
+      <a href="/admin/logs" class="btn-clear">Limpiar</a>
+    </form>
+
     <% if (logs && logs.length) { %>
       <table>
         <thead>
@@ -41,7 +68,7 @@
         </tbody>
       </table>
     <% } else { %>
-      <p>No hay registros de cambios para mostrar.</p>
+      <p>No hay registros que coincidan con los filtros.</p>
     <% } %>
   </main>
 

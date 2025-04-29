@@ -1,86 +1,138 @@
 /* public/css/logs.css */
 
 body {
-    background-color: #F8F9FA;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  background-color: #f8f9fa;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* estilos para los filtros */
+.log-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.log-filters input,
+.log-filters select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.log-filters button,
+.log-filters .btn-clear {
+  align-self: flex-end;
+  padding: 0.5rem 1rem;
+  background-color: #0D6EFD;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.log-filters .btn-clear {
+  background-color: #6c757d;
+  margin-left: 0.5rem;
+}
+
+.log-filters button:hover,
+.log-filters .btn-clear:hover {
+  opacity: 0.9;
+}
+
+
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #0d6efd;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+thead {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+thead th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: normal;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
+.error {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
   }
-  
-  main {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #FFFFFF;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    text-align: center;
-    color: #0D6EFD;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1.5rem;
-  }
-  
+
   thead {
-    background-color: #0D6EFD;
-    color: #fff;
+    display: none;
   }
-  
-  thead th {
-    padding: 0.75rem;
-    text-align: left;
-    font-weight: normal;
+
+  tr {
+    margin-bottom: 1rem;
   }
-  
-  tbody tr:nth-child(even) {
-    background-color: #F1F3F5;
+
+  td {
+    position: relative;
+    padding-left: 50%;
   }
-  
-  tbody td {
-    padding: 0.75rem;
-    border-bottom: 1px solid #e0e0e0;
-    vertical-align: top;
+
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.75rem;
+    width: calc(50% - 1.5rem);
+    font-weight: bold;
+    white-space: nowrap;
   }
-  
-  .error {
-    color: #DC3545;
-    text-align: center;
-    margin-top: 1rem;
-  }
-  
-  @media (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-      display: block;
-    }
-  
-    thead {
-      display: none;
-    }
-  
-    tr {
-      margin-bottom: 1rem;
-    }
-  
-    td {
-      position: relative;
-      padding-left: 50%;
-    }
-  
-    td::before {
-      content: attr(data-label);
-      position: absolute;
-      left: 0.75rem;
-      width: calc(50% - 1.5rem);
-      font-weight: bold;
-      white-space: nowrap;
-    }
-  }
-  
+}
