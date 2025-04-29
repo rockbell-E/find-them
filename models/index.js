@@ -14,6 +14,9 @@ Trabajador.belongsTo(Empresa, { foreignKey: 'empresaId', as: 'empresa' });
 Empresa.hasMany(Sucursal, { foreignKey: 'empresaId', as: 'sucursales' });
 Sucursal.belongsTo(Empresa, { foreignKey: 'empresaId', as: 'empresa' });
 
+Log.belongsTo(Empresa, { foreignKey: 'empresaId' });
+Empresa.hasMany(Log, { foreignKey: 'empresaId' });
+
 module.exports = {
   sequelize,
   User,

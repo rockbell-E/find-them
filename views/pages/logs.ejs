@@ -12,32 +12,30 @@
 
   <main>
     <h1><%= title %></h1>
-
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
-
-    <% if (logs && logs.length > 0) { %>
+    <% if (logs && logs.length) { %>
       <table>
         <thead>
           <tr>
             <th>Fecha</th>
-            <th>Usuario</th>
+            <th>Empresa (email)</th>
             <th>Entidad</th>
             <th>ID</th>
             <th>Acción</th>
-            <th>Cambios</th>
+            <th>Resumen</th>
           </tr>
         </thead>
         <tbody>
           <% logs.forEach(log => { %>
             <tr>
-              <td data-label="Fecha"><%= log.createdAt.toLocaleString() %></td>
-              <td data-label="Usuario"><%= log.usuarioId %></td>
+              <td data-label="Fecha"><%= new Date(log.createdAt).toLocaleString() %></td>
+              <td data-label="Empresa"><%= log.empresaEmail %></td>
               <td data-label="Entidad"><%= log.entidad %></td>
               <td data-label="ID"><%= log.entidadId %></td>
               <td data-label="Acción"><%= log.accion %></td>
-              <td data-label="Cambios"><pre><%= JSON.stringify(log.cambios, null, 2) %></pre></td>
+              <td data-label="Resumen"><%= log.summary %></td>
             </tr>
           <% }) %>
         </tbody>
@@ -45,7 +43,6 @@
     <% } else { %>
       <p>No hay registros de cambios para mostrar.</p>
     <% } %>
-
   </main>
 
   <%- include('../partials/footer') %>
