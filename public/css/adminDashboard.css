@@ -28,7 +28,7 @@ body {
   }
   
   .dashboard-links {
-    display: flex;
+    display: grid;
     justify-content: center;
     margin-top: 2rem;
     gap: 1rem;
