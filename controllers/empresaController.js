@@ -252,21 +252,56 @@ const getChangePassword = (req, res) => {
 
 const postChangePassword = async (req, res) => {
   try {
-    const { newPassword } = req.body;
+    const { currentPassword, newPassword, confirmPassword } = req.body;
     const empresaId = req.session.user.id;
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    const empresa = await Empresa.findByPk(empresaId);
+    if (!empresa) {
+      throw new Error('Empresa no encontrada');
+    }
 
-    const before = await Empresa.findByPk(empresaId);
-    await Empresa.update({ password: hashedPassword, firstLogin: false }, { where: { id: empresaId } });
-    await Log.create({ empresaId, usuarioId: empresaId, entidad: 'Empresa', entidadId: empresaId, accion: 'update', cambios: { before: before.toJSON(), after: { firstLogin: false } } });
+    const match = await bcrypt.compare(currentPassword, empresa.password);
+    if (!match) {
+      return res.render('pages/changePassword', {
+        title: 'Cambiar Contraseña',
+        error: 'La contraseña actual no coincide'
+      });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.render('pages/changePassword', {
+        title: 'Cambiar Contraseña',
+        error: 'La nueva contraseña y su confirmación no coinciden'
+      });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    await Empresa.update(
+      { password: hashed, firstLogin: false },
+      { where: { id: empresaId } }
+    );
+    await Log.create({
+      empresaId,
+      usuarioId: empresaId,
+      entidad: 'Empresa',
+      entidadId: empresaId,
+      accion: 'update',
+      cambios: { before: { firstLogin: empresa.firstLogin }, after: { firstLogin: false } }
+    });
 
     req.session.user.firstLogin = false;
     res.redirect('/empresa/dashboard');
+    
   } catch (error) {
     console.error(error);
-    res.render('pages/changePassword', { title: 'Cambiar Contraseña', error: 'Error al actualizar la contraseña' });
+    res.render('pages/changePassword', {
+      title: 'Cambiar Contraseña',
+      error: 'Error al actualizar la contraseña'
+    });
   }
 };
+
 
 module.exports = {
   dashboard,
