@@ -302,7 +302,6 @@ const postChangePassword = async (req, res) => {
   }
 };
 
-
 module.exports = {
   dashboard,
   listWorkers,
