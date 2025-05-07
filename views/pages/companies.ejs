@@ -29,7 +29,7 @@
         <% empresas.forEach(function(empresa) { %>
           <li class="company-item">
             <div class="company-info">
-              <strong class="c-name"><%= empresa.name %></strong> – <%= empresa.email %>
+              <span class="c-name"><%= empresa.name %></span> – <%= empresa.email %>
             </div>
             <div class="company-actions">
               <a href="/admin/companies/<%= empresa.id %>/edit" class="btn-edit">Editar</a>

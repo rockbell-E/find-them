@@ -75,6 +75,10 @@ li.company-item .company-info {
   transition: background-color 0.3s ease;
 }
 
+.c-name {
+  font-weight: bold;
+}
+
 .btn-edit {
   background-color: #0D6EFD;
   color: #fff;
