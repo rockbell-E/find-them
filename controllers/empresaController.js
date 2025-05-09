@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { Op } = require('sequelize')
 const { Trabajador, Sucursal, Empresa, Cargo, Log } = require('../models');
 
 const dashboard = (req, res) => {
@@ -11,20 +12,33 @@ const dashboard = (req, res) => {
 const listWorkers = async (req, res) => {
   try {
     const empresaId = req.session.user.companyId || req.session.user.id;
+    const showDeleted = req.query.deleted === '1';
+
+    const whereClause = { empresaId };
+    if (showDeleted) {
+      whereClause.active = false;
+    } else {
+      whereClause.active = true;
+    }
 
     const workers = await Trabajador.findAll({
-      where: { empresaId, active: true }
+      where: whereClause
     });
 
-    const cargos = await Cargo.findAll({ where: { empresaId, active: true } });
-    const sucursales = await Sucursal.findAll({ where: { empresaId, active: true } });
+    const cargos = await Cargo.findAll({ 
+      where: { empresaId, active: true } 
+    });
+    const sucursales = await Sucursal.findAll({ 
+      where: { empresaId, active: true } 
+    });
 
     res.render('pages/empresaWorkers', {
       title: 'Lista de Trabajadores',
       workers,
       cargos,
       sucursales,
-      error: null
+      error: null,
+      showDeleted
     });
   } catch (error) {
     console.error(error);
@@ -33,7 +47,8 @@ const listWorkers = async (req, res) => {
       workers: [],
       cargos: [],
       sucursales: [],
-      error: 'Error al obtener trabajadores'
+      error: 'Error al obtener trabajadores',
+      showDeleted: req.query.deleted === '1'
     });
   }
 };

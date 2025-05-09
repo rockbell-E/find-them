@@ -16,6 +16,14 @@
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
+
+    <div class="toggle-deleted">
+      <% if (showDeleted) { %>
+        <a href="/empresa/workers" class="btn-toggle">Mostrar Activos</a>
+      <% } else { %>
+        <a href="/empresa/workers?deleted=1" class="btn-toggle btn-delete">Mostrar Eliminados</a>
+      <% } %>
+    </div>
     
     <div class="filters">
       <input 
@@ -78,7 +86,9 @@
       <p>No se encontraron trabajadores.</p>
     <% } %>
     
-    <a href="/empresa/workers/new" class="btn-new">Agregar Trabajador</a>
+        <% if (!showDeleted) { %>
+      <a href="/empresa/workers/new" class="btn-new">Agregar Trabajador</a>
+    <% } %>
   </main>
   <%- include('../partials/footer') %>
   
