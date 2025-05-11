@@ -17,6 +17,7 @@ router.post('/workers', empresaController.createWorker);
 router.get('/workers/:workerId/edit', empresaController.getEditWorker);
 router.post('/workers/:workerId', empresaController.updateWorker);
 router.post('/workers/:workerId/delete', empresaController.deleteWorker);
+router.post('/workers/:workerId/restore', empresaController.restoreWorker);
 
 router.get('/branches', empresaController.listBranches);
 router.get('/branches/new', empresaController.getNewBranch);

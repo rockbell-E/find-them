@@ -184,6 +184,33 @@ const deleteWorker = async (req, res) => {
   }
 };
 
+const restoreWorker = async (req, res) => {
+  try {
+    const empresaId = req.session.user.companyId || req.session.user.id;
+    const usuarioId = req.session.user.id;
+    const workerId  = req.params.workerId;
+
+    await Trabajador.update(
+      { active: true },
+      { where: { id: workerId } }
+    );
+
+    await Log.create({
+      empresaId,
+      usuarioId,
+      entidad:   'Trabajador',
+      entidadId: workerId,
+      accion:    'restore',
+      cambios:   { active: true }
+    });
+
+    res.redirect('/empresa/workers?deleted=1');
+  } catch (error) {
+    console.error(error);
+    res.redirect('/empresa/workers?deleted=1');
+  }
+};
+
 const listBranches = async (req, res) => {
   try {
     const companyId = req.session.user.companyId;
@@ -332,5 +359,6 @@ module.exports = {
   updateBranch,
   deleteBranch,
   getChangePassword,
-  postChangePassword
+  postChangePassword,
+  restoreWorker
 };
