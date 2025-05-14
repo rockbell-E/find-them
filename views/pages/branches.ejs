@@ -16,6 +16,14 @@
       <p class="error"><%= error %></p>
     <% } %>
 
+    <div class="toggle-deleted">
+      <% if (showDeleted) { %>
+        <a href="/empresa/branches" class="btn-toggle">Mostrar Activas</a>
+      <% } else { %>
+        <a href="/empresa/branches?deleted=1" class="btn-toggle btn-delete">Mostrar Eliminadas</a>
+      <% } %>
+    </div>
+
     <div class="filter-branch">
       <input
         type="text"
@@ -29,16 +37,20 @@
         <% branches.forEach(function(branch) { %>
           <li class="branch-item">
             <div class="branch-info">
-              <strong class="b-name"><%= branch.name %></strong> – <span class="b-location"><%= branch.location %></span>
+              <strong class="b-name"><%= branch.name %></strong> –
+              <span class="b-location"><%= branch.location %></span>
             </div>
             <div class="branch-actions">
-              <a href="/empresa/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
-              <form action="/empresa/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;"> 
-                <button type="submit" class="btn-delete"
-                  onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">
-                  Eliminar
-                </button>
-              </form>              
+              <% if (!showDeleted) { %>
+                <a href="/empresa/branches/<%= branch.id %>/edit" class="btn-edit">Editar</a>
+                <form action="/empresa/branches/<%= branch.id %>/delete" method="POST" style="display:inline-block;">
+                  <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">Eliminar</button>
+                </form>
+              <% } else { %>
+                <form action="/empresa/branches/<%= branch.id %>/restore" method="POST" style="display:inline-block;">
+                  <button type="submit" class="btn-edit">Reactivar</button>
+                </form>
+              <% } %>
             </div>
           </li>
         <% }); %>
@@ -47,11 +59,12 @@
       <p>No se encontraron sucursales.</p>
     <% } %>
     
-    <a href="/empresa/branches/new" class="btn-new">Crear Nueva Sucursal</a>
+    <% if (!showDeleted) { %>
+      <a href="/empresa/branches/new" class="btn-new">Crear Nueva Sucursal</a>
+    <% } %>
   </main>
   
   <%- include('../partials/footer') %>
-  
   <script src="/js/branches.js"></script>
 </body>
 </html>

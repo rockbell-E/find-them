@@ -25,6 +25,7 @@ router.post('/branches', empresaController.createBranch);
 router.get('/branches/:branchId/edit', empresaController.getEditBranch);
 router.post('/branches/:branchId', empresaController.updateBranch);
 router.post('/branches/:branchId/delete', empresaController.deleteBranch);
+router.post('/branches/:branchId/restore', empresaController.restoreBranch);
 
 router.get('/changePassword', empresaController.getChangePassword);
 router.post('/changePassword', empresaController.postChangePassword);

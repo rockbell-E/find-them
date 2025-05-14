@@ -213,12 +213,51 @@ const restoreWorker = async (req, res) => {
 
 const listBranches = async (req, res) => {
   try {
-    const companyId = req.session.user.companyId;
-    const branches = await Sucursal.findAll({ where: { empresaId: companyId, active: true } });
-    res.render('pages/branches', { title: 'Lista de Sucursales', branches, error: null });
+    const empresaId  = req.session.user.companyId || req.session.user.id;
+    const showDeleted = req.query.deleted === '1';
+
+    const whereClause = { empresaId };
+    whereClause.active = showDeleted ? false : true;
+
+    const branches = await Sucursal.findAll({ where: whereClause });
+
+    res.render('pages/branches', {
+      title:       'Lista de Sucursales',
+      branches,
+      error:       null,
+      showDeleted
+    });
   } catch (error) {
     console.error(error);
-    res.render('pages/branches', { title: 'Lista de Sucursales', branches: [], error: 'Error al obtener sucursales' });
+    res.render('pages/branches', {
+      title:       'Lista de Sucursales',
+      branches:    [],
+      error:       'Error al obtener sucursales',
+      showDeleted: req.query.deleted === '1'
+    });
+  }
+};
+
+const restoreBranch = async (req, res) => {
+  try {
+    const empresaId = req.session.user.companyId || req.session.user.id;
+    const branchId  = req.params.branchId;
+
+    await Sucursal.update({ active: true }, { where: { id: branchId } });
+
+    await Log.create({
+      empresaId,
+      usuarioId: empresaId,
+      entidad:   'Sucursal',
+      entidadId: branchId,
+      accion:    'restore',
+      cambios:   { active: true }
+    });
+
+    res.redirect('/empresa/branches?deleted=1');
+  } catch (error) {
+    console.error(error);
+    res.redirect('/empresa/branches?deleted=1');
   }
 };
 
@@ -360,5 +399,6 @@ module.exports = {
   deleteBranch,
   getChangePassword,
   postChangePassword,
-  restoreWorker
+  restoreWorker,
+  restoreBranch
 };
