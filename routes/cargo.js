@@ -13,4 +13,6 @@ router.post('/cargos/:id', cargoController.updateCargo);
 
 router.post('/cargos/:id/delete', cargoController.deleteCargo);
 
+router.post('cargos/:id/restore', cargoController.restoreCargo);
+
 module.exports = router;

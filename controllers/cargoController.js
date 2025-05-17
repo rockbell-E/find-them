@@ -1,15 +1,30 @@
 const { Cargo } = require('../models');
+const { Op } = require('sequelize');
 
 const listCargos = async (req, res) => {
   try {
-    const empresaId = req.session.user.companyId || req.session.user.id;
-    const cargos = await Cargo.findAll({
-      where: { empresaId, active: true }
+    const empresaId   = req.session.user.companyId || req.session.user.id;
+    const showDeleted = req.query.deleted === '1';
+
+    const where = { empresaId };
+    where.active = showDeleted ? false : true;
+
+    const cargos = await Cargo.findAll({ where });
+
+    res.render('pages/cargos', {
+      title:     'Lista de Cargos',
+      cargos,
+      error:     null,
+      showDeleted
     });
-    res.render('pages/cargos', { title: 'Lista de Cargos', cargos, error: null });
   } catch (error) {
     console.error(error);
-    res.render('pages/cargos', { title: 'Lista de Cargos', cargos: [], error: 'Error al obtener cargos' });
+    res.render('pages/cargos', {
+      title:       'Lista de Cargos',
+      cargos:      [],
+      error:       'Error al obtener cargos',
+      showDeleted: req.query.deleted === '1'
+    });
   }
 };
 
@@ -20,7 +35,7 @@ const getNewCargo = (req, res) => {
 const createCargo = async (req, res) => {
   try {
     const empresaId = req.session.user.companyId || req.session.user.id;
-    const { name } = req.body;
+    const { name }  = req.body;
     await Cargo.create({ name, empresaId, active: true });
     res.redirect('/empresa/cargos');
   } catch (error) {
@@ -35,9 +50,7 @@ const createCargo = async (req, res) => {
 const getEditCargo = async (req, res) => {
   try {
     const empresaId = req.session.user.companyId || req.session.user.id;
-    const cargo = await Cargo.findOne({
-      where: { id: req.params.id, empresaId }
-    });
+    const cargo     = await Cargo.findOne({ where: { id: req.params.id, empresaId } });
     if (!cargo) return res.redirect('/empresa/cargos');
     res.render('pages/editCargo', { title: 'Editar Cargo', cargo, error: null });
   } catch (error) {
@@ -49,11 +62,8 @@ const getEditCargo = async (req, res) => {
 const updateCargo = async (req, res) => {
   try {
     const empresaId = req.session.user.companyId || req.session.user.id;
-    const { name } = req.body;
-    await Cargo.update(
-      { name },
-      { where: { id: req.params.id, empresaId } }
-    );
+    const { name }  = req.body;
+    await Cargo.update({ name }, { where: { id: req.params.id, empresaId } });
     res.redirect('/empresa/cargos');
   } catch (error) {
     console.error(error);
@@ -75,11 +85,26 @@ const deleteCargo = async (req, res) => {
   }
 };
 
+const restoreCargo = async (req, res) => {
+  try {
+    const empresaId = req.session.user.companyId || req.session.user.id;
+    await Cargo.update(
+      { active: true },
+      { where: { id: req.params.id, empresaId } }
+    );
+    res.redirect('/empresa/cargos?deleted=1');
+  } catch (error) {
+    console.error(error);
+    res.redirect('/empresa/cargos?deleted=1');
+  }
+};
+
 module.exports = {
   listCargos,
   getNewCargo,
   createCargo,
   getEditCargo,
   updateCargo,
-  deleteCargo
+  deleteCargo,
+  restoreCargo
 };
