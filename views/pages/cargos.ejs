@@ -15,24 +15,48 @@
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
+
+    <div class="toggle-deleted">
+      <% if (showDeleted) { %>
+        <a href="/empresa/cargos" class="btn-toggle">Mostrar Activos</a>
+      <% } else { %>
+        <a href="/empresa/cargos?deleted=1" class="btn-toggle btn-delete">
+          Mostrar Eliminados
+        </a>
+      <% } %>
+    </div>
+
     <% if (cargos && cargos.length > 0) { %>
       <ul class="cargo-list">
-        <% cargos.forEach(function(cargo) { %>
+        <% cargos.forEach(cargo => { %>
           <li>
             <span><%= cargo.name %></span>
             <div class="cargo-actions">
-              <a href="/empresa/cargos/<%= cargo.id %>/edit" class="btn-edit">Editar</a>
-              <form action="/empresa/cargos/<%= cargo.id %>/delete" method="POST" style="display:inline-block;"> 
-                <button type="submit" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar este cargo?');">Eliminar</button>
-              </form>              
+              <% if (!showDeleted) { %>
+                <a href="/empresa/cargos/<%= cargo.id %>/edit" class="btn-edit">Editar</a>
+                <form action="/empresa/cargos/<%= cargo.id %>/delete" method="POST" style="display:inline-block;">
+                  <button type="submit" class="btn-delete" onclick="return confirm('¿Eliminar este cargo?');">
+                    Eliminar
+                  </button>
+                </form>
+              <% } else { %>
+                <form action="/empresa/cargos/<%= cargo.id %>/restore" method="POST" style="display:inline-block;">
+                  <button type="submit" class="btn-edit" onclick="return confirm('¿Reactivar este cargo?');">
+                    Reactivar
+                  </button>
+                </form>
+              <% } %>
             </div>
           </li>
-        <% }); %>
+        <% }) %>
       </ul>
     <% } else { %>
-      <p>No se encontraron cargos.</p>
+      <p><%= showDeleted ? 'No hay cargos eliminados.' : 'No se encontraron cargos.' %></p>
     <% } %>
-    <a href="/empresa/cargos/new" class="btn-new">Crear Nuevo Cargo</a>
+
+    <% if (!showDeleted) { %>
+      <a href="/empresa/cargos/new" class="btn-new">Crear Nuevo Cargo</a>
+    <% } %>
   </main>
   
   <%- include('../partials/footer') %>
