@@ -27,6 +27,23 @@ body {
     margin-bottom: 1rem;
   }
   
+.toggle-deleted {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.btn-toggle {
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  background: #6c757d;
+  color: #fff;
+  font-size: 0.9rem;
+}
+.btn-toggle.btn-delete {
+  background: #dc3545;
+}
+
   .cargo-list {
     list-style: none;
     padding: 0;
