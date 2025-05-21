@@ -19,26 +19,49 @@ const dashboard = (req, res) => {
 
 const listCompanies = async (req, res) => {
   try {
+    const showDeleted = req.query.deleted === '1';
     const searchQuery = req.query.search || '';
     let empresas;
 
+    const whereClause = {
+      active: showDeleted ? false : true,
+    };
+
     if (searchQuery) {
-      empresas = await Empresa.findAll({
-        where: {
-          active: true,
-          name: { [Op.like]: `%${searchQuery}%` }
-        }
-      });
-    } else {
-      empresas = await Empresa.findAll({ where: { active: true } });
+      whereClause.name = { [Op.like]: `%${searchQuery}%` };
     }
-    
-    res.render('pages/companies', { title: 'Lista de Empresas', empresas, searchQuery, error: null });
+
+    empresas = await Empresa.findAll({ where: whereClause });
+
+    res.render('pages/companies', {
+      title: showDeleted ? 'Empresas Eliminadas' : 'Lista de Empresas',
+      empresas,
+      searchQuery,
+      error: null,
+      showDeleted
+    });
   } catch (error) {
     console.error(error);
-    res.render('pages/companies', { title: 'Lista de Empresas', empresas: [], searchQuery: '', error: 'Error al obtener empresas' });
+    res.render('pages/companies', {
+      title: 'Lista de Empresas',
+      empresas: [],
+      searchQuery: '',
+      error: 'Error al obtener empresas',
+      showDeleted: req.query.deleted === '1'
+    });
   }
 };
+
+const restoreCompany = async (req, res) => {
+  try {
+    await Empresa.update({ active: true }, { where: { id: req.params.id } });
+    res.redirect('/admin/companies?deleted=1');
+  } catch (error) {
+    console.error(error);
+    res.redirect('/admin/companies?deleted=1');
+  }
+};
+
 
 const getNewCompany = (req, res) => {
   res.render('pages/newCompany', { title: 'Nueva Empresa', error: null });
@@ -196,5 +219,6 @@ module.exports = {
   createWorker,
   getEditWorker,
   updateWorker,
-  deleteWorker
+  deleteWorker,
+  restoreCompany
 };
