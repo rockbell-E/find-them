@@ -18,6 +18,7 @@ router.post('/companies', adminController.createCompany);
 router.get('/companies/:id/edit', adminController.getEditCompany);
 router.post('/companies/:id', adminController.updateCompany);
 router.post('/companies/:id/delete', adminController.deleteCompany);
+router.post('/companies/:id/restore', adminController.restoreCompany);
 
 router.get('/companies/:id/workers', adminController.listWorkers);
 router.get('/companies/:id/workers/new', adminController.getNewWorker);

@@ -12,9 +12,18 @@
 
   <main>
     <h1><%= title %></h1>
+
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
+
+    <div class="toggle-deleted">
+      <% if (showDeleted) { %>
+        <a href="/admin/companies" class="btn-toggle">Mostrar Activas</a>
+      <% } else { %>
+        <a href="/admin/companies?deleted=1" class="btn-toggle btn-delete">Mostrar Eliminadas</a>
+      <% } %>
+    </div>
 
     <div class="filter-company">
       <input
@@ -32,13 +41,19 @@
               <span class="c-name"><%= empresa.name %></span> – <%= empresa.email %>
             </div>
             <div class="company-actions">
-              <a href="/admin/companies/<%= empresa.id %>/edit" class="btn-edit">Editar</a>
-              <form action="/admin/companies/<%= empresa.id %>/delete" method="POST" style="display: inline;">
-                <button type="submit" class="btn-delete"
-                  onclick="return confirm('¿Estás seguro de eliminar esta empresa?');">
-                  Eliminar
-                </button>
-              </form>
+              <% if (showDeleted) { %>
+                <form action="/admin/companies/<%= empresa.id %>/restore" method="POST" style="display: inline;">
+                  <button type="submit" class="btn-edit">Reactivar</button>
+                </form>
+              <% } else { %>
+                <a href="/admin/companies/<%= empresa.id %>/edit" class="btn-edit">Editar</a>
+                <form action="/admin/companies/<%= empresa.id %>/delete" method="POST" style="display: inline;">
+                  <button type="submit" class="btn-delete"
+                    onclick="return confirm('¿Estás seguro de eliminar esta empresa?');">
+                    Eliminar
+                  </button>
+                </form>
+              <% } %>
             </div>
           </li>
         <% }); %>
