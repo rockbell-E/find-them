@@ -27,6 +27,9 @@ router.get('/companies/:id/workers/:workerId/edit', adminController.getEditWorke
 router.post('/companies/:id/workers/:workerId', adminController.updateWorker);
 router.post('/companies/:id/workers/:workerId/delete', adminController.deleteWorker);
 
+router.post('/force-password-reset', adminController.forcePasswordReset);
+
+
 router.get('/logs', listLogs);
 
 module.exports = router;

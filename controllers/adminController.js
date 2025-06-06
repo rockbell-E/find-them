@@ -206,6 +206,17 @@ const deleteWorker = async (req, res) => {
   }
 };
 
+const forcePasswordReset = async (req, res) => {
+  try {
+    await Empresa.update({ firstLogin: true }, { where: { active: true } });
+    console.log('Todas las empresas deberán cambiar su contraseña al iniciar sesión.');
+    res.redirect('/admin/dashboard');
+  } catch (error) {
+    console.error(error);
+    res.redirect('/admin/dashboard');
+  }
+};
+
 module.exports = {
   dashboard,
   listCompanies,
@@ -220,5 +231,6 @@ module.exports = {
   getEditWorker,
   updateWorker,
   deleteWorker,
-  restoreCompany
+  restoreCompany,
+  forcePasswordReset
 };

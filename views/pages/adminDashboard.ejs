@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin</title>
-  <link rel="stylesheet" href="/css/adminDashboard.css">
-  <link rel="stylesheet" href="/css/header-footer.css">
-</head>
-<body>
-  <%- include('../partials/header') %>
-  
-  <main>
-    <h1>Dashboard de Administrador</h1>
-    <p>Bienvenido, <%= user.username %>!</p>
-    <div class="dashboard-links">
-      <a href="/admin/companies">Gestionar Empresas</a>
-      <a href="/admin/companies/new">Crear Nueva Empresa</a>
-    </div>
-  </main>
-  
-  <%- include('../partials/footer') %>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="/css/adminDashboard.css" />
+    <link rel="stylesheet" href="/css/header-footer.css" />
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+
+    <main>
+      <h1>Dashboard de Administrador</h1>
+      <p>Bienvenido, <%= user.username %>!</p>
+      <div class="dashboard-links">
+        <a href="/admin/companies">Gestionar Empresas</a>
+        <a href="/admin/companies/new">Crear Nueva Empresa</a>
+        <form
+          action="/admin/force-password-reset"
+          method="POST"
+          style="margin-top: 1rem"
+        >
+          <button
+            type="submit"
+            class="btn-delete"
+            onclick="return confirm('¿Estás seguro de forzar el cambio de contraseña para todas las empresas?');"
+          >
+            Forzar Cambio de Contraseña
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </body>
 </html>
