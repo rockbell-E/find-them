@@ -356,6 +356,21 @@ const postChangePassword = async (req, res) => {
       });
     }
 
+    if (newPassword === currentPassword) {
+      return res.render('pages/changePassword', {
+        title: 'Cambiar Contraseña',
+        error: 'La nueva contraseña no puede ser igual a la actual'
+      });
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.render('pages/changePassword', {
+        title: 'Cambiar Contraseña',
+        error: 'La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número'
+      });
+    }
+
     const hashed = await bcrypt.hash(newPassword, 10);
 
     await Empresa.update(
