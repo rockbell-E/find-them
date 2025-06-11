@@ -34,7 +34,7 @@ label {
 
 input[type="text"] {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 0 0.75rem 0.20rem;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
