@@ -29,6 +29,9 @@ router.post('/companies/:id/workers/:workerId/delete', adminController.deleteWor
 
 router.post('/force-password-reset', adminController.forcePasswordReset);
 
+router.get('/change-password', adminController.getChangePassword);
+router.post('/change-password', adminController.postChangePassword);
+
 
 router.get('/logs', listLogs);
 

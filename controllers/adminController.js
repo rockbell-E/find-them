@@ -217,6 +217,63 @@ const forcePasswordReset = async (req, res) => {
   }
 };
 
+const getChangePassword = (req, res) => {
+  res.render('pages/changePasswordAdmin', { title: 'Cambiar Contraseña (Admin)', error: null });
+};
+
+const postChangePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.status(403).send('Acceso no autorizado');
+    }
+
+    const userId = req.session.user.id;
+    const user = await require('../models').User.findByPk(userId);
+    if (!user) {
+      return res.status(404).render('pages/changePasswordAdmin', {
+        title: 'Cambiar Contraseña (Admin)',
+        error: 'Usuario no encontrado'
+      });
+    }
+
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) {
+      return res.render('pages/changePasswordAdmin', {
+        title: 'Cambiar Contraseña (Admin)',
+        error: 'La contraseña actual no coincide'
+      });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.render('pages/changePasswordAdmin', {
+        title: 'Cambiar Contraseña (Admin)',
+        error: 'La nueva contraseña y su confirmación no coinciden'
+      });
+    }
+
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!regex.test(newPassword)) {
+      return res.render('pages/changePasswordAdmin', {
+        title: 'Cambiar Contraseña (Admin)',
+        error: 'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula y un número.'
+      });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await user.update({ password: hashed });
+
+    res.redirect('/admin/dashboard');
+  } catch (error) {
+    console.error(error);
+    res.render('pages/changePasswordAdmin', {
+      title: 'Cambiar Contraseña (Admin)',
+      error: 'Error al actualizar la contraseña'
+    });
+  }
+};
+
 module.exports = {
   dashboard,
   listCompanies,
@@ -232,5 +289,7 @@ module.exports = {
   updateWorker,
   deleteWorker,
   restoreCompany,
-  forcePasswordReset
+  forcePasswordReset,
+  getChangePassword,
+  postChangePassword
 };
