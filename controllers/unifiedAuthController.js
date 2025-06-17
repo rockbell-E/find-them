@@ -44,4 +44,53 @@ const logout = (req, res) => {
   res.redirect('/login');
 };
 
-module.exports = { getLogin, postLogin, logout };
+const getForgotPassword = (req, res) => {
+  res.render('pages/forgotPassword', { title: 'Recuperar Contraseña', error: null });
+};
+
+const postForgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const empresa = await Empresa.findOne({ where: { email, active: true } });
+    if (!empresa) {
+      return res.render('pages/forgotPassword', {
+        title: 'Recuperar Contraseña',
+        error: 'No se encontró una empresa activa con ese correo.'
+      });
+    }
+
+    const tempPassword = generatePassword();
+    const hashed = await bcrypt.hash(tempPassword, 10);
+
+    await Empresa.update(
+      { password: hashed, firstLogin: true },
+      { where: { id: empresa.id } }
+    );
+
+    console.log(`🔐 Contraseña temporal para ${empresa.email}: ${tempPassword}`);
+    res.redirect('/login');
+  } catch (error) {
+    console.error(error);
+    res.render('pages/forgotPassword', {
+      title: 'Recuperar Contraseña',
+      error: 'Error al procesar la recuperación.'
+    });
+  }
+};
+
+function generatePassword() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
+module.exports = {
+  getLogin,
+  postLogin,
+  logout,
+  getForgotPassword,
+  postForgotPassword
+};
