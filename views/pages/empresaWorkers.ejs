@@ -74,6 +74,10 @@
       <% } else { %>
         <p>No se encontraron trabajadores.</p>
       <% } %>
+      <% if (!showDeleted) { %>
+        <a href="/empresa/workers/new" class="btn-new">Crear trabajador</a>
+      <% } %>
+
     </main>
 
     <%- include('../partials/footer') %>
