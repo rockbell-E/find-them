@@ -59,3 +59,12 @@ form button {
 form button:hover {
   background-color: #0b5ed7;
 }
+
+.form-group a {
+  color: #0D6EFD;
+  text-decoration: none;
+}
+
+.form-group a:hover {
+  text-decoration: underline;
+}
